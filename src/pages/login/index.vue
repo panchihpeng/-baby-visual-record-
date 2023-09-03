@@ -49,6 +49,7 @@
           type="password"
         />
       </nut-form-item>
+      
     </nut-form>
 
 
@@ -114,6 +115,10 @@ const { currRole } = storeToRefs(userStore);
 
 onMounted(() => {
   // getRoleDesc();
+  const userInfoStorage = Taro.getStorageSync("userInfo");
+  userInfo.username = userInfoStorage?.username;
+  userInfo.password = userInfoStorage?.password;
+
   getAuthTokenWrapper();
 });
 
@@ -124,12 +129,14 @@ const changeSelectedRole = (value) => {
 };
 
 const handleLogin = () => {
+
   const roleValue = selectedRole.value;
 
   formRef.value?.validate?.().then(({ valid }) => {
     if (valid) {
       login(userInfo).then((res: any) => {
         setUserInfo(res.data);
+        Taro.setStorageSync("userInfo",userInfo);
         Taro.switchTab({
           url: "/pages/preset/index",
         });
@@ -174,6 +181,7 @@ const getAuthTokenWrapper = () => {
     Taro.setStorageSync("accessToken", res.data.access_token);
   });
 };
+
 
 // const getRoleDesc = () => {
 //   roleDesc.value =
