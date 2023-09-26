@@ -1,4 +1,5 @@
 <template>
+
   <Container hidden-role-select v-if="currRole === EnumRole.Student">
     <nut-form :disabled="isDisabled" v-if="!isHidden && isMounted">
       <nut-form-item>
@@ -182,6 +183,7 @@
 
           <view class="gap-margin">
             <Dot>活动记录开始</Dot>
+
             <view>
               <TabItem
                 :tabsList="activityStartList"
@@ -201,6 +203,14 @@
 
         <view class="card-wrapper">
           <Dot>互动记录</Dot>
+
+
+          <nut-button block type="primary" shape="square"  @click="handleTabShow"  color="linear-gradient(to right, #FF983D, #FFAC63)">
+            <view v-if="showTab" > 收 起 <IconFont name="arrow-up" size="12" style="height: 10px !important;"></IconFont> </view>
+            <view v-else> 展 开  <IconFont name="arrow-down" size="12" style="height: 10px !important;"></IconFont></view>
+          </nut-button>
+
+          <view  v-if="showTab">
           <nut-tabs v-model="state.tabValue">
             <nut-tab-pane title="儿童发起">
               <view class="gap-margin">
@@ -292,6 +302,8 @@
               </view>
             </nut-tab-pane>
           </nut-tabs>
+          </view>
+
         </view>
       </view>
     </view>
@@ -311,6 +323,7 @@
 </template>
 
 <script lang="ts" setup>
+import { IconFont } from "@nutui/icons-vue-taro";
 import { computed, ref, reactive } from "vue";
 import { storeToRefs } from "pinia";
 import { useUserStore } from "@/stores/user";
@@ -721,6 +734,7 @@ import {
   kidsResponseList,
 } from "@/constants";
 
+const  showTab = ref(false);
 const presetsCode = ref("");
 
 // 记录活动
@@ -771,6 +785,11 @@ const goToStudentsList = () => {
     url: `/pages/students-list/index?deviceCode=${currDeviceCode.value}`,
   });
 };
+
+const handleTabShow = () => {
+  showTab.value = !showTab.value;
+};
+
 const run = async () => {
 
   await deviceSentRecordCommand()

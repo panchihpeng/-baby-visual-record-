@@ -80,7 +80,7 @@
 <script lang="ts" setup>
 import { storeToRefs } from "pinia";
 import Taro from "@tarojs/taro";
-import { IconFont } from "@nutui/icons-vue-taro";
+// import { IconFont } from "@nutui/icons-vue-taro";
 import { reactive, onMounted, ref, watch } from "vue";
 import { getAuthToken, login } from "@/services/login";
 import { useUserStore } from "@/stores/user";
@@ -88,8 +88,8 @@ import { roleOptions, EnumRole } from "@/constants";
 import TabItem from "@/components/tab-item/index.vue";
 
 
-const show = ref(false);
-const roleDesc = ref("");
+// const show = ref(false);
+// const roleDesc = ref("");
 const selectedRole = ref(EnumRole.Student);
 
 const clientId = "wx_1";
@@ -106,24 +106,24 @@ const userInfo = reactive({
 const userStore = useUserStore();
 
 const { setUserInfo } = userStore;
-const { currRole } = storeToRefs(userStore);
-// const popupValue = ref([currRole.value ?? EnumRole.Student]);
-//
-// watch(currRole, (val) => {
-//   popupValue.value = [val || EnumRole.Student];
-// });
+
 
 onMounted(() => {
-  // getRoleDesc();
+
   const userInfoStorage = Taro.getStorageSync("userInfo");
   userInfo.username = userInfoStorage?.username;
   userInfo.password = userInfoStorage?.password;
 
+  changeSelectedRole( {
+    text: "上课者",
+    value: EnumRole.Student,
+  })
   getAuthTokenWrapper();
 });
 
 
 const changeSelectedRole = (value) => {
+
   selectedRole.value = value.value;
   userStore.setCurrRole(value.value)
 };
@@ -140,6 +140,7 @@ const handleLogin = () => {
         Taro.switchTab({
           url: "/pages/preset/index",
         });
+
         if (roleValue === EnumRole.Student) {
           Taro.setTabBarItem({
             index: 0,
@@ -182,21 +183,6 @@ const getAuthTokenWrapper = () => {
   });
 };
 
-
-// const getRoleDesc = () => {
-//   roleDesc.value =
-//     roleOptions.find((op) => op.value === popupValue.value?.[0])?.text || "";
-// };
-//
-//
-// const popupConfirm = ({ selectedValue }) => {
-//   show.value = false;
-//   popupValue.value = selectedValue;
-//   roleDesc.value =
-//     roleOptions.find((op) => op.value === popupValue.value?.[0])?.text || "";
-//
-//   userStore.setCurrRole(selectedValue[0]);
-// };
 </script>
 
 <style lang="scss">

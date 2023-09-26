@@ -10,7 +10,7 @@
           >{{ item.teacherName }}邀请</view
         >
         <view class="invitaion-item__left--teacher-name">{{
-          dayjs(item.pTime).format("MM-DD HH:mm")
+          dayjs(item.createTime).format("MM-DD HH:mm")
         }}</view>
       </view>
 
